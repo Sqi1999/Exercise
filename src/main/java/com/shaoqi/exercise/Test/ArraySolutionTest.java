@@ -21,4 +21,10 @@ public class ArraySolutionTest {
         int reverse = ArraySolution.reverse(2325);
         Assert.assertEquals(5232,reverse);
     }
+    @Test
+    public void maxArea(){
+        int [] a={3,6,2,4,8,6,2,1,4,6};
+        int i = ArraySolution.maxArea(a);
+        System.out.println(i);
+    }
 }
