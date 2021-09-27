@@ -19,4 +19,13 @@ public class StringSolution {
         }
         return s;
     }
+
+    public static void main(String[] args) {
+        String t="hello";
+        String b="hello";
+        System.out.println(t==b);
+        char [] c={'h','e','l','l','o'};
+        System.out.println(t.equals(c));
+        System.out.println(t.equals(new String("hello")));
+    }
 }
