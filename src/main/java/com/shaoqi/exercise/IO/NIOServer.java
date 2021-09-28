@@ -1,7 +1,6 @@
 package com.shaoqi.exercise.IO;
 
 import java.net.InetSocketAddress;
-import java.net.StandardSocketOptions;
 import java.nio.ByteBuffer;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
@@ -33,7 +32,6 @@ public class NIOServer {
                 System.out.println("client...p0ort"+port);
                 clients.add(client);
             }
-
             ByteBuffer buffer=ByteBuffer.allocateDirect(4096);  //内存分配可以在堆里，也可以在堆外
             for (SocketChannel c:clients){  //串行化  多线程！！！
                 int num=c.read(buffer); //>0 -1 0 //不会阻塞

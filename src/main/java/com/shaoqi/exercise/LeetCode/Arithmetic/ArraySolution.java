@@ -44,4 +44,10 @@ public class ArraySolution {
         return sum;
     }
 
+    public static void main(String[] args) {
+        System.out.println((int)5.5);
+        System.out.println(((int)5.5*203));
+        System.out.println((int)(5.5*203));
+    }
+
 }
