@@ -2,10 +2,8 @@ package com.shaoqi.exercise.IO.testTreactor;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.nio.channels.Channel;
-import java.nio.channels.ClosedChannelException;
-import java.nio.channels.SelectionKey;
-import java.nio.channels.ServerSocketChannel;
+import java.nio.channels.*;
+import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -20,11 +18,12 @@ public class SelectorThreadGroup {
 
     AtomicInteger xid=new AtomicInteger(0);
 
+
     SelectorThreadGroup(int number){
         //number  线程数
         sts=new SelectorThread[number];
         for (int i = 0; i < number; i++) {
-            sts[i]=new SelectorThread();
+            sts[i]=new SelectorThread(this);
             new Thread(sts[i]).start();
         }
     }
@@ -42,17 +41,23 @@ public class SelectorThreadGroup {
             e.printStackTrace();
         }
     }
+    
     private void  nextSelector(Channel c){
-        try {
-            SelectorThread st = next();
-            //重点  c可能是selver  有可能是client
-            ServerSocketChannel s = (ServerSocketChannel) c;
-            //会阻塞
-            st.selector.wakeup();  //让selector的select 立刻返回，不阻塞
-            s.register(st.selector, SelectionKey.OP_ACCEPT);//要呼应上  int num=selector.slect
-        } catch (ClosedChannelException e) {
-            e.printStackTrace();
-        }
+        SelectorThread st = next();
+        //添加到队列
+        st.lqp.add(c);
+        //不阻塞
+        st.selector.wakeup();
+//
+//        try {
+//            //重点  c可能是selver  有可能是client
+//            ServerSocketChannel s = (ServerSocketChannel) c;
+//            //会阻塞
+//            st.selector.wakeup();  //让selector的select 立刻返回，不阻塞
+//            s.register(st.selector, SelectionKey.OP_ACCEPT);//要呼应上  int num=selector.slect
+//        } catch (ClosedChannelException e) {
+//            e.printStackTrace();
+//        }
     }
     //无论serversocket socket 都要复用这个方法
     private SelectorThread next() {

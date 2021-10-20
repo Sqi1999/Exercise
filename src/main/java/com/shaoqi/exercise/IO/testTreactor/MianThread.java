@@ -11,7 +11,7 @@ public class MianThread {
     public static void main(String[] args) {
         //1.创建IOTherad(一个或多个)
 SelectorThreadGroup stg=new SelectorThreadGroup(1);
-SelectorThreadGroup st1=new SelectorThreadGroup(3);//混杂模式，只有一个线程负责accept  每个都会被分配client 进行读写
+//SelectorThreadGroup st1=new SelectorThreadGroup(3);//混杂模式，只有一个线程负责accept  每个都会被分配client 进行读写
 
         //2.应该吧监听的server 注册到某一个selector上
 

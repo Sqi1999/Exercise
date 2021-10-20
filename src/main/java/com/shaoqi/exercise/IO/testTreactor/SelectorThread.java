@@ -5,6 +5,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.*;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.concurrent.LinkedBlockingDeque;
 
 /**
  * @author shaoqi
@@ -17,10 +18,12 @@ public class SelectorThread implements  Runnable{
     //其实不会有交互问题
 
     Selector selector=null;
+    LinkedBlockingDeque<Channel> lqp=new LinkedBlockingDeque<>();
+SelectorThreadGroup stg;
 
-
-    SelectorThread(){
+    SelectorThread(SelectorThreadGroup stg){
         try {
+            this.stg=stg;
             selector=Selector.open();
         } catch (IOException e) {
             e.printStackTrace();
@@ -33,8 +36,10 @@ public class SelectorThread implements  Runnable{
             //loop
         while(true){
             try {
-                //1.select
-                int num = selector.select(1); //阻塞  wakeup();
+                System.out.println(Thread.currentThread().getName()+"  1  selector"+ selector.keys().size());
+                //1.select一旦调用select()方法，并且返回值不为0时，则 可以通过调用Selector的selectedKeys()方法来访问已选择键集合
+                int num = selector.select(); //阻塞  wakeup();
+                System.out.println(Thread.currentThread().getName()+"2   selector"+selector.keys().size());
                 //2.处理 selectKey
                 if (num>0){
                     Set<SelectionKey> keys=selector.selectedKeys();
@@ -51,8 +56,21 @@ public class SelectorThread implements  Runnable{
                         }
                     }
                 }
+
+                //将队列的取出来
+                if (!lqp.isEmpty()){
+                    Channel c = lqp.take();
+                    if (c instanceof ServerSocketChannel){
+                        ServerSocketChannel server = (ServerSocketChannel) c;
+                        server.register(selector,SelectionKey.OP_ACCEPT);
+                    }else if (c instanceof  SocketChannel){
+                        SocketChannel client = (SocketChannel) c;
+                        ByteBuffer byteBuffer = ByteBuffer.allocateDirect(4096);
+                        client.register(selector,SelectionKey.OP_READ,byteBuffer);
+                    }
+                }
                 //3.处理一些task
-            } catch (IOException e) {
+            } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
             }
         }

@@ -6,6 +6,9 @@ import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.LinkedList;
 
+/**
+ * 客户端
+ */
 public class NIOServer {
 
     public static void main(String[] args) throws Exception{
@@ -29,7 +32,7 @@ public class NIOServer {
             }else{
                 client.configureBlocking(false); //重点
                 int port=client.socket().getPort();
-                System.out.println("client...p0ort"+port);
+                System.out.println("客户端连接："+port);
                 clients.add(client);
             }
             ByteBuffer buffer=ByteBuffer.allocateDirect(4096);  //内存分配可以在堆里，也可以在堆外
