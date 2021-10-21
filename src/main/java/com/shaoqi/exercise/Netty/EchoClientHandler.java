@@ -2,6 +2,7 @@ package com.shaoqi.exercise.Netty;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.util.CharsetUtil;
@@ -21,8 +22,9 @@ import io.netty.util.CharsetUtil;
  * channelRead0（）--当从服务器接受到一条消息时被调用
  * exceptionConfig（）--在处理过程中引发异常时候调用
  */
-@io.netty.channel.ChannelHandler.Sharable   //标记该实例可以被多个Channel共享
-public class ChannelHandler extends SimpleChannelInboundHandler<ByteBuf> {
+//@Sharable   //标记该实例可以被多个Channel共享
+    @ChannelHandler.Sharable
+public class EchoClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
 
     @Override
     public void channelActive(ChannelHandlerContext ctx)  {
@@ -37,7 +39,9 @@ public class ChannelHandler extends SimpleChannelInboundHandler<ByteBuf> {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
+        System.out.println("结束");
         cause.printStackTrace();
+
         ctx.close();
     }
 }

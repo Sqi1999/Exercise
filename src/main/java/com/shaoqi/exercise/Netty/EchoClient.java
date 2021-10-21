@@ -26,6 +26,7 @@ public class EchoClient {
     }
 
     public void start() throws  Exception{
+        final EchoClientHandler client=new EchoClientHandler();
         EventLoopGroup group=new NioEventLoopGroup();
         try {
         Bootstrap b=new Bootstrap();
@@ -35,11 +36,12 @@ public class EchoClient {
                 .handler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     protected void initChannel(SocketChannel ch) throws Exception {
-                        ch.pipeline().addLast(new ChannelHandler());
+                        ch.pipeline().addLast(client);
                     }
                 });
 
             ChannelFuture f = b.connect().sync();
+
             f.channel().closeFuture().sync();
         } finally {
             group.shutdownGracefully().sync();
@@ -54,7 +56,6 @@ public class EchoClient {
 //        }
         String host ="192.168.11.161";
         int post=8888;
-        System.out.println(post);
         new EchoClient(host,post).start();
     }
 }
