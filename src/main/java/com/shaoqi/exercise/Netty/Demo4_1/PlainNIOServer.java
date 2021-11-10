@@ -1,4 +1,4 @@
-package com.shaoqi.exercise.IO;
+package com.shaoqi.exercise.Netty.Demo4_1;
 
 import org.springframework.expression.spel.ast.Selection;
 
@@ -32,25 +32,25 @@ public class PlainNIOServer {
         final ByteBuffer msg=ByteBuffer.wrap("HI!\r\n".getBytes());
         while (true){
             try{
-                selector.select();
+                selector.select();  //需要等待处理的新事件，阻塞到一直持续到下一个事件的传入
             }catch (IOException e){
                 e.printStackTrace();
                 break;
             }
 
 
-            Set<SelectionKey> readyKey=selector.selectedKeys();
+            Set<SelectionKey> readyKey=selector.selectedKeys();  //获取所有的SleectedKey实例
             Iterator<SelectionKey> iterator=readyKey.iterator();
             while (iterator.hasNext()){
                 SelectionKey key=iterator.next();
                 iterator.remove();
                 try{
-                    if (key.isAcceptable()){
+                    if (key.isAcceptable()){ //检查事件是不是一个新的已经就绪可以被接受的连接
                         ServerSocketChannel server=(ServerSocketChannel)key.channel();
 
                         SocketChannel client=server.accept();
                         client.configureBlocking(false);
-                        client.register(selector,SelectionKey.OP_WRITE|SelectionKey.OP_READ,msg.duplicate());
+                        client.register(selector,SelectionKey.OP_WRITE|SelectionKey.OP_READ,msg.duplicate());  //接收客户端并将写入选择器
 
                         System.out.println("Accpeted connection from"+client);
                     }
