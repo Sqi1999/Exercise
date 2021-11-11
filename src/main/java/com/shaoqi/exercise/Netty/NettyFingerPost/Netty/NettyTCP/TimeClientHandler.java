@@ -2,6 +2,7 @@ package com.shaoqi.exercise.Netty.NettyFingerPost.Netty.NettyTCP;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 
@@ -12,6 +13,7 @@ import java.util.logging.Logger;
  * @version 1.0
  * @date 2021/11/11 11:03
  */
+@ChannelHandler.Sharable
 public class TimeClientHandler extends ChannelInboundHandlerAdapter {
     private static  final Logger logger=Logger.getLogger(TimeClientHandler.class.getName());
 

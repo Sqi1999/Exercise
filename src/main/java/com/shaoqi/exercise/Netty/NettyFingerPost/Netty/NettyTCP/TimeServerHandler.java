@@ -2,10 +2,7 @@ package com.shaoqi.exercise.Netty.NettyFingerPost.Netty.NettyTCP;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import io.netty.channel.ChannelHandlerAdapter;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandlerAdapter;
-import io.netty.channel.ChannelOutboundHandlerAdapter;
+import io.netty.channel.*;
 
 import java.util.Date;
 
@@ -15,6 +12,7 @@ import java.util.Date;
  * @date 2021/11/11 10:27
  * 对TimeServer的改造  模拟TCP粘包问题
  */
+@ChannelHandler.Sharable
 public class TimeServerHandler extends ChannelInboundHandlerAdapter {
 
 
