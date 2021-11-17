@@ -37,7 +37,7 @@ public class EchoServer {
                              * 1024表示单条消息最大长度，当到达长度后还没找到分隔符，就抛出异常，防止由于异常码流失
                              * 分隔符导致的内存溢出，这是netty解码器的可靠性保护，第二个就是分隔符缓冲对象
                              */
-                            ByteBuf delimiter= Unpooled.copiedBuffer("$_".getBytes());
+                            ByteBuf delimiter= Unpooled.copiedBuffer("head_data".getBytes());
                             ch.pipeline().addLast(new DelimiterBasedFrameDecoder(1024,delimiter));
                             ch.pipeline().addLast(new StringDecoder());
                             ch.pipeline().addLast(new EchoServerHandler());
